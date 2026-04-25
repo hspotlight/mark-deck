@@ -10,11 +10,11 @@
 |---|-------|--------|
 | [01](01-project-scaffold.md) | Project Scaffold & Firebase Config | ✅ |
 | [02](02-landing-page.md) | Landing Page | ✅ |
-| [03](03-anonymous-editor-preview.md) | Anonymous Editor + Marp Live Preview | ☐ |
-| [04](04-public-deck-viewer.md) | Public Deck Viewer | ☐ |
-| [05](05-author-profile-page.md) | Author Profile Page | ☐ |
-| [06](06-404-page.md) | 404 Page | ☐ |
-| [07](07-waitlist-anonymous.md) | Waitlist Page – Anonymous Email Form | ☐ |
+| [03](03-anonymous-editor-preview.md) | Anonymous Editor + Marp Live Preview | ✅ |
+| [04](04-public-deck-viewer.md) | Public Deck Viewer | ✅ |
+| [05](05-author-profile-page.md) | Author Profile Page | ✅ |
+| [06](06-404-page.md) | 404 Page | ✅ |
+| [07](07-waitlist-anonymous.md) | Waitlist Page – Anonymous Email Form | ✅ |
 
 ## Group B: Auth Bridge
 
