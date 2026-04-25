@@ -55,10 +55,6 @@ Bootstrap the full project skeleton end-to-end: Next.js App Router project wired
 - [ ] `storage.rules` scaffolded: images readable by anyone, writable by owner only
 - [ ] Rules deployed to emulator and pass a basic rule unit test (`@firebase/rules-unit-testing`)
 
-### CI
-- [ ] GitHub Actions workflow: on push to `main` — install, lint, unit test, emulator e2e test
-- [ ] Workflow passes on an empty commit after scaffold
-
 ---
 
 ## Implementation notes

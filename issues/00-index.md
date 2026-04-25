@@ -8,8 +8,8 @@
 
 | # | Title | Status |
 |---|-------|--------|
-| [01](01-project-scaffold.md) | Project Scaffold & Firebase Config | ☐ |
-| [02](02-landing-page.md) | Landing Page | ☐ |
+| [01](01-project-scaffold.md) | Project Scaffold & Firebase Config | ✅ |
+| [02](02-landing-page.md) | Landing Page | ✅ |
 | [03](03-anonymous-editor-preview.md) | Anonymous Editor + Marp Live Preview | ☐ |
 | [04](04-public-deck-viewer.md) | Public Deck Viewer | ☐ |
 | [05](05-author-profile-page.md) | Author Profile Page | ☐ |
