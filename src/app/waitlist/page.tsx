@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import WaitlistForm from "./WaitlistForm";
+import WaitlistFormWrapper from "./WaitlistFormWrapper";
 
 export const metadata: Metadata = {
   title: "Join the waitlist — mark-deck",
@@ -35,7 +35,7 @@ export default function WaitlistPage() {
             it launches.
           </p>
 
-          <WaitlistForm />
+          <WaitlistFormWrapper />
         </div>
       </main>
     </div>

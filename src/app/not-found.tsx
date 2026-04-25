@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import Button from "@mui/material/Button";
 
 export const metadata: Metadata = {
@@ -19,7 +18,7 @@ export default function NotFound() {
         The deck, profile, or route you&apos;re looking for isn&apos;t here.
         It may have been deleted or the URL may be wrong.
       </p>
-      <Button variant="contained" component={Link} href="/">
+      <Button variant="contained" href="/">
         Go to homepage
       </Button>
     </div>
