@@ -12,7 +12,7 @@ import PreviewPanel from "./PreviewPanel";
 
 function EditorShell() {
   const { user } = useAuth();
-  const { markdown, setMarkdown } = useEditor();
+  const { markdown, theme, setMarkdown } = useEditor();
   const viewRef = useRef<EditorView | null>(null);
 
   return (
@@ -39,8 +39,14 @@ function EditorShell() {
           <Button
             variant="contained"
             size="small"
-            href="/login"
             sx={{ fontSize: 12, textTransform: "none" }}
+            onClick={() => {
+              if (markdown) {
+                sessionStorage.setItem("pendingMigrationMarkdown", markdown);
+                sessionStorage.setItem("pendingMigrationTheme", theme);
+              }
+              window.location.href = "/login";
+            }}
           >
             Sign In
           </Button>

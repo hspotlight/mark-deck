@@ -5,10 +5,12 @@ import {
   getDocs,
   getDoc,
   doc,
+  addDoc,
   updateDoc,
   increment,
   limit,
   orderBy,
+  serverTimestamp,
 } from "firebase/firestore";
 import { db } from "@/lib/db";
 import type { Deck, UserProfile } from "@/types";
@@ -100,4 +102,32 @@ export async function incrementViewCount(deckId: string): Promise<void> {
 
 export async function incrementDownloadCount(deckId: string): Promise<void> {
   await updateDoc(doc(db, "decks", deckId), { downloadCount: increment(1) });
+}
+
+export interface CreateDeckInput {
+  title: string;
+  markdown: string;
+  theme: string;
+  ownerId: string;
+  visibility: "public" | "unlisted" | "private";
+}
+
+export async function createDeck(input: CreateDeckInput): Promise<string> {
+  const ref = await addDoc(collection(db, "decks"), {
+    title: input.title,
+    markdown: input.markdown,
+    theme: input.theme,
+    ownerId: input.ownerId,
+    visibility: input.visibility,
+    slug: "",
+    viewCount: 0,
+    downloadCount: 0,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+    publishedAt: null,
+    htmlUrl: null,
+    pdfUrl: null,
+    thumbnailUrl: null,
+  });
+  return ref.id;
 }

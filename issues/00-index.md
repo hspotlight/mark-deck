@@ -20,8 +20,8 @@
 
 | # | Title | Status |
 |---|-------|--------|
-| [08](08-authentication.md) | Authentication – Login Page + AuthContext | ☐ |
-| [09](09-anonymous-migration.md) | Anonymous → Permanent Account Migration | ☐ |
+| [08](08-authentication.md) | Authentication – Login Page + AuthContext | ✅ |
+| [09](09-anonymous-migration.md) | Anonymous → Permanent Account Migration | ✅ |
 
 ## Group C: Logged-In User
 

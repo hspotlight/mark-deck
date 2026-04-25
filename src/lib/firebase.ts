@@ -14,10 +14,26 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
-const functions = getFunctions(app);
+// Firebase client SDK must only initialize in the browser.
+// During Next.js SSR/prerendering there are no valid env vars and
+// getAuth() throws auth/invalid-api-key.
+const isClient = typeof window !== "undefined";
+
+const app = isClient
+  ? getApps().length
+    ? getApp()
+    : initializeApp(firebaseConfig)
+  : (null! as ReturnType<typeof getApp>);
+
+const auth = isClient ? getAuth(app) : (null! as ReturnType<typeof getAuth>);
+const db = isClient
+  ? getFirestore(app)
+  : (null! as ReturnType<typeof getFirestore>);
+const storage = isClient
+  ? getStorage(app)
+  : (null! as ReturnType<typeof getStorage>);
+const functions = isClient
+  ? getFunctions(app)
+  : (null! as ReturnType<typeof getFunctions>);
 
 export { app, auth, db, storage, functions };
