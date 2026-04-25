@@ -11,12 +11,15 @@ import {
   signOut as firebaseSignOut,
   sendPasswordResetEmail,
 } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { ensureUserDocument, handleMigration } from "@/modules/auth-module";
+import type { UserProfile } from "@/types";
 
 export interface AuthContextValue {
   user: FirebaseUser | null;
+  userProfile: UserProfile | null;
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
@@ -27,14 +30,27 @@ export interface AuthContextValue {
   ) => Promise<void>;
   signOut: () => Promise<void>;
   sendPasswordReset: (email: string) => Promise<void>;
+  refreshUserProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<FirebaseUser | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
+  async function fetchUserProfile(uid: string) {
+    const snap = await getDoc(doc(db, "users", uid));
+    if (snap.exists()) {
+      setUserProfile({ id: snap.id, ...(snap.data() as Omit<UserProfile, "id">) });
+    }
+  }
+
+  async function refreshUserProfile() {
+    if (user) await fetchUserProfile(user.uid);
+  }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -45,11 +61,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         } catch {
           // Leave sessionStorage intact so the user can retry
         }
+        await fetchUserProfile(firebaseUser.uid);
+      } else {
+        setUserProfile(null);
       }
       setUser(firebaseUser);
       setLoading(false);
     });
     return unsubscribe;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function signInWithGoogle(): Promise<void> {
@@ -81,6 +101,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function signOut(): Promise<void> {
     await firebaseSignOut(auth);
+    setUserProfile(null);
     router.push("/");
   }
 
@@ -92,12 +113,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     <AuthContext.Provider
       value={{
         user,
+        userProfile,
         loading,
         signInWithGoogle,
         signInWithEmail,
         signUpWithEmail,
         signOut,
         sendPasswordReset,
+        refreshUserProfile,
       }}
     >
       {children}

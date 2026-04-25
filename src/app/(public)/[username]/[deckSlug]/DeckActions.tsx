@@ -16,7 +16,6 @@ export default function DeckActions({ deckId, pdfUrl, currentUrl }: Props) {
   const didCount = useRef(false);
   const [snackOpen, setSnackOpen] = useState(false);
 
-  // Increment view count once on mount
   useEffect(() => {
     if (didCount.current) return;
     didCount.current = true;
@@ -28,7 +27,6 @@ export default function DeckActions({ deckId, pdfUrl, currentUrl }: Props) {
       await navigator.clipboard.writeText(currentUrl);
       setSnackOpen(true);
     } catch {
-      // fallback: select + execCommand
       const el = document.createElement("textarea");
       el.value = currentUrl;
       document.body.appendChild(el);
