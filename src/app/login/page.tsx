@@ -71,7 +71,7 @@ function LoginForm() {
   const [error, setError] = useState("");
   const [resetSent, setResetSent] = useState(false);
 
-  const redirectTo = searchParams.get("redirect") ?? "/dashboard";
+  const redirectTo = searchParams.get("redirect") ?? "/editor";
 
   useEffect(() => {
     if (!loading && user) {
