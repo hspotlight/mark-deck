@@ -47,5 +47,29 @@
       "port": 4000
     },
     "singleProjectMode": true
-  }
+  },
+  "apphosting": [
+    {
+      "backendId": "mark-deck",
+      "rootDir": "/",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "functions"
+      ]
+    },
+    {
+      "backendId": "mark-deck",
+      "rootDir": "/",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "functions"
+      ]
+    }
+  ]
 }
