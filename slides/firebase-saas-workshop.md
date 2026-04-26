@@ -16,6 +16,28 @@ h1 { color: #7C4A1E; border-bottom: 3px solid #F5C518; padding-bottom: 6px; }
 h2 { color: #7C4A1E; }
 h3 { color: #9B5E26; }
 
+/* Quote slides */
+section.quote {
+  justify-content: center !important;
+  text-align: center;
+  background-color: #FDF4E0;
+}
+section.quote blockquote {
+  border-left: none;
+  background: none;
+  font-size: 1.3em;
+  font-style: italic;
+  color: #2D1B00;
+  padding: 0;
+  margin: 0 auto 0.6em;
+  max-width: 85%;
+}
+section.quote p {
+  font-size: 0.8em;
+  color: #7C4A1E;
+  font-weight: 600;
+}
+
 /* Section title slides */
 section.section-title {
   background-color: #E8C96A;
@@ -120,6 +142,15 @@ footer {
 
 1. We will go to the finish line together
 2. Feel free to ask questions at any time
+
+---
+
+<!-- _class: quote -->
+
+> "Everything in software architecture is a trade-off."
+
+— Mark Richards & Neal Ford
+*First Law of Software Architecture*
 
 ---
 
@@ -586,6 +617,16 @@ Watch GitHub Actions:
 
 ---
 
+<!-- _class: quote -->
+
+> "If it hurts, do it more frequently,
+> and bring the pain forward."
+
+— Martin Fowler
+*on Continuous Integration*
+
+---
+
 <!-- _class: section-title -->
 
 # 7. 🌿 Git + Environment Strategy
@@ -723,6 +764,16 @@ logEvent(analytics, "link_clicked", { url: "https://..." });
 - CI/CD pipeline: PR → test, merge → prod
 - Two environments wired to two Firebase projects
 - Tests running on every PR
+
+---
+
+<!-- _class: quote -->
+
+> "Tell me and I forget.
+> Show me and I remember.
+> Involve me and I understand."
+
+— Benjamin Franklin
 
 ---
 
