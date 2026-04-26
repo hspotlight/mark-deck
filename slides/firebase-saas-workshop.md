@@ -52,8 +52,12 @@ th { background-color: #F5C518; color: #2D1B00; font-weight: bold; }
 td { border: 1px solid #DEB96A; }
 tr:nth-child(even) td { background-color: #FDF4E0; }
 
-/* Pagination */
-section::after { color: #9B5E26; font-size: 0.7em; }
+/* Pagination with total */
+section::after {
+  content: attr(data-marpit-pagination) " / " attr(data-marpit-pagination-total);
+  color: #9B5E26;
+  font-size: 0.7em;
+}
 
 /* Section progress badge */
 footer {
@@ -72,7 +76,7 @@ footer {
 }
 </style>
 
-# Zero to SaaS
+# 🚀 Zero to SaaS
 
 <img src="hspotlight-logo.jpg" width="200" style="position:absolute;right:40px;top:40px;">
 
@@ -86,7 +90,7 @@ footer {
 
 <!-- _footer: "Agenda · 1/2" -->
 
-## Agenda
+## 📋 Agenda
 
 | # | Section | Time |
 |---|---|---|
@@ -100,7 +104,7 @@ footer {
 
 <!-- _footer: "Agenda · 2/2" -->
 
-## Agenda (cont.)
+## 📋 Agenda (cont.)
 
 | # | Section | Time |
 |---|---|---|
@@ -112,7 +116,7 @@ footer {
 
 ---
 
-## Ground Rules
+## 📜 Ground Rules
 
 1. We will go to the finish line together
 2. Feel free to ask questions at any time
@@ -121,13 +125,13 @@ footer {
 
 <!-- _class: section-title -->
 
-# 1. What We're Building
+# 1. 🏗️ What We're Building
 
 ---
 
-<!-- _footer: "What We're Building · 1/2" -->
+<!-- _footer: "What We're Building · 1/3" -->
 
-## Link-in-Bio SaaS
+## 🔗 Link-in-Bio SaaS
 
 A personal page that lists your links — think Linktree.
 
@@ -144,9 +148,9 @@ Hosting feels meaningful · Auth makes sense · Firestore is simple · You can p
 
 ---
 
-<!-- _footer: "What We're Building · 2/2" -->
+<!-- _footer: "What We're Building · 2/3" -->
 
-## Live Demo
+## 🎬 Live Demo
 
 > **[TODO: insert your Link-in-Bio URL here]**
 
@@ -157,9 +161,35 @@ Hosting feels meaningful · Auth makes sense · Firestore is simple · You can p
 
 ---
 
+<!-- _footer: "What We're Building · 3/3" -->
+
+## 💡 What Can You Build?
+
+<table style="width:100%;table-layout:fixed;border:none;border-collapse:separate;border-spacing:16px;">
+  <tr>
+    <td style="border:none;text-align:center;background:#FDF4E0;border-radius:12px;padding:16px;vertical-align:top;">
+      <img src="hspotlight-logo.jpg" style="width:100%;border-radius:8px;margin-bottom:10px;">
+      <strong style="color:#7C4A1E;">✅ Todo App</strong><br>
+      <small style="color:#5C3A10;">Task management with Auth + Firestore</small>
+    </td>
+    <td style="border:none;text-align:center;background:#FDF4E0;border-radius:12px;padding:16px;vertical-align:top;">
+      <img src="hspotlight-logo.jpg" style="width:100%;border-radius:8px;margin-bottom:10px;">
+      <strong style="color:#7C4A1E;">🔳 QR Code Generator</strong><br>
+      <small style="color:#5C3A10;">Generate & save QR codes to Firestore</small>
+    </td>
+    <td style="border:none;text-align:center;background:#FDF4E0;border-radius:12px;padding:16px;vertical-align:top;">
+      <img src="hspotlight-logo.jpg" style="width:100%;border-radius:8px;margin-bottom:10px;">
+      <strong style="color:#7C4A1E;">✍️ Personal Blog</strong><br>
+      <small style="color:#5C3A10;">Write & publish posts with Hosting + Firestore</small>
+    </td>
+  </tr>
+</table>
+
+---
+
 <!-- _class: section-title -->
 
-# 2. Setup Verification
+# 2. ✅ Setup Verification
 
 **Action:** Run version check commands in your terminal
 **Result:** All tools confirmed — Node, Firebase CLI, git, Claude Code logged in
@@ -168,7 +198,7 @@ Hosting feels meaningful · Auth makes sense · Firestore is simple · You can p
 
 <!-- _footer: "Setup Verification · 1/2" -->
 
-## Pre-workshop Checklist
+## ✅ Pre-workshop Checklist
 
 Run this to verify everything is installed:
 
@@ -185,7 +215,7 @@ If anything is missing → raise your hand now
 
 <!-- _footer: "Setup Verification · 2/2" -->
 
-## Required Tools
+## 🛠️ Required Tools
 
 | Tool | Install |
 |---|---|
@@ -203,7 +233,7 @@ firebase login
 
 <!-- _class: section-title -->
 
-# 3. Clone Starter Repo
+# 3. 📦 Clone Starter Repo
 
 **Action:** Clone the workshop repo and open it in your editor
 **Result:** Project folder open locally, solution branch available if you get stuck
@@ -212,7 +242,7 @@ firebase login
 
 <!-- _footer: "Clone Starter Repo · 1/1" -->
 
-## Get the Starter
+## 📥 Get the Starter
 
 ```bash
 git clone https://github.com/hspotlight/zero-to-saas-workshop
@@ -238,7 +268,7 @@ zero-to-saas-workshop/
 
 <!-- _class: section-title -->
 
-# 4. Claude Code Workflow
+# 4. 🤖 Claude Code Workflow
 
 **Action:** Plan → PRD → CLAUDE.md → Agents → Scaffold
 **Result:** Project fully planned, rules set, agents created, app structure generated from your PRD
@@ -247,7 +277,7 @@ zero-to-saas-workshop/
 
 <!-- _footer: "Claude Code Workflow · 1/9" -->
 
-## Claude Code Workflow — Overview
+## 🗺️ Claude Code Workflow — Overview
 
 ```
 1. /grill-me                        → define the project (Q&A)
@@ -262,7 +292,7 @@ zero-to-saas-workshop/
 
 <!-- _footer: "Claude Code Workflow · 2/9" -->
 
-## What is Claude Code?
+## 🤖 What is Claude Code?
 
 Claude Code is an AI coding agent that runs in your terminal.
 
@@ -276,7 +306,7 @@ It can:
 
 <!-- _footer: "Claude Code Workflow · 3/9" -->
 
-## Skills: Pre-built Workflows
+## ⚡ Skills: Pre-built Workflows
 
 The starter repo already includes three skills:
 
@@ -292,7 +322,7 @@ Skills live in the repo — no extra install needed.
 
 <!-- _footer: "Claude Code Workflow · 4/9" -->
 
-## Step 1: Plan with `/grill-me`
+## 🧠 Step 1: Plan with `/grill-me`
 
 Before writing any code, run:
 
@@ -308,7 +338,7 @@ Claude interviews you — one question at a time — until it has a complete pic
 
 <!-- _footer: "Claude Code Workflow · 5/9" -->
 
-## Step 2: Write the PRD with `/to-prd`
+## 📄 Step 2: Write the PRD with `/to-prd`
 
 Once the plan is agreed, run:
 
@@ -324,7 +354,7 @@ Claude converts the conversation into a structured Product Requirements Document
 
 <!-- _footer: "Claude Code Workflow · 6/9" -->
 
-## Step 3: Create `CLAUDE.md`
+## 📝 Step 3: Create `CLAUDE.md`
 
 Create `CLAUDE.md` — rules Claude must follow on every task:
 
@@ -348,7 +378,7 @@ Create `CLAUDE.md` — rules Claude must follow on every task:
 
 <!-- _footer: "Claude Code Workflow · 7/9" -->
 
-## Step 4: Create Agents
+## 👥 Step 4: Create Agents
 
 Ask Claude to generate agents for this project:
 
@@ -363,7 +393,7 @@ Claude creates `AGENTS.md` with tailored agents based on your stack and PRD.
 
 <!-- _footer: "Claude Code Workflow · 8/9" -->
 
-## Step 5: Scaffold with `/firebase-webapp-scaffold`
+## 🏗️ Step 5: Scaffold with `/firebase-webapp-scaffold`
 
 Once CLAUDE.md and agents are in place, run:
 
@@ -377,7 +407,7 @@ Claude reads the PRD doc and builds the full app structure for you.
 
 <!-- _footer: "Claude Code Workflow · 9/9" -->
 
-## Step 6: The Development Loop
+## 🔄 Step 6: The Development Loop
 
 For each feature — end-to-end, one slice at a time:
 
@@ -396,7 +426,7 @@ For each feature — end-to-end, one slice at a time:
 
 <!-- _class: section-title -->
 
-# 5. Firebase Project Setup
+# 5. 🔥 Firebase Project Setup
 
 **Action:** Create two Firebase projects (test + prod), configure env files, enable services
 **Result:** Two live Firebase projects wired to your local `.env.test` and `.env.prod`
@@ -405,7 +435,7 @@ For each feature — end-to-end, one slice at a time:
 
 <!-- _footer: "Firebase Setup · 1/4" -->
 
-## Firebase: What We're Using
+## 🔥 Firebase: What We're Using
 
 | Service | What it does |
 |---|---|
@@ -418,7 +448,7 @@ For each feature — end-to-end, one slice at a time:
 
 <!-- _footer: "Firebase Setup · 2/4" -->
 
-## Create Two Firebase Projects
+## 🧪 Create Two Firebase Projects
 
 We need two projects: **test** and **prod**
 
@@ -436,7 +466,7 @@ We need two projects: **test** and **prod**
 
 <!-- _footer: "Firebase Setup · 3/4" -->
 
-## Configure Environment Variables
+## ⚙️ Configure Environment Variables
 
 Copy the template:
 ```bash
@@ -459,7 +489,7 @@ FIREBASE_APP_ID=...
 
 <!-- _footer: "Firebase Setup · 4/4" -->
 
-## Enable Firebase Services
+## ✅ Enable Firebase Services
 
 In each Firebase project console, enable:
 
@@ -473,7 +503,7 @@ Do this for both `link-in-bio-test` and `link-in-bio-prod`.
 
 <!-- _class: section-title -->
 
-# 6. CI/CD with Firebase CLI
+# 6. 🚦 CI/CD with Firebase CLI
 
 **Action:** Run `firebase init hosting:github`, add test step, open your first PR
 **Result:** Every PR auto-deploys to test, every merge to main auto-deploys to prod
@@ -482,7 +512,7 @@ Do this for both `link-in-bio-test` and `link-in-bio-prod`.
 
 <!-- _footer: "CI/CD · 1/4" -->
 
-## Set Up GitHub Actions
+## ⚙️ Set Up GitHub Actions
 
 Firebase CLI generates the workflow for you:
 
@@ -501,7 +531,7 @@ Your env vars stay in `.env.test` and `.env.prod` — never in GitHub secrets.
 
 <!-- _footer: "CI/CD · 2/4" -->
 
-## Generated Workflow
+## 📋 Generated Workflow
 
 ```yaml
 # On every PR: deploy to test project
@@ -521,7 +551,7 @@ Two workflows. Two projects. Automatic.
 
 <!-- _footer: "CI/CD · 3/4" -->
 
-## Add a Test Step
+## 🧪 Add a Test Step
 
 Open the generated workflow file and add before deploy:
 
@@ -539,7 +569,7 @@ Now tests must pass before any deployment happens.
 
 <!-- _footer: "CI/CD · 4/4" -->
 
-## Open Your First PR
+## 🔀 Open Your First PR
 
 ```bash
 git checkout -b feature/add-auth
@@ -558,13 +588,13 @@ Watch GitHub Actions:
 
 <!-- _class: section-title -->
 
-# 7. Git + Environment Strategy
+# 7. 🌿 Git + Environment Strategy
 
 ---
 
 <!-- _footer: "Git Strategy · 1/3" -->
 
-## The Mapping
+## 🗺️ The Mapping
 
 ```
 feature branch
@@ -582,7 +612,7 @@ feature branch
 
 <!-- _footer: "Git Strategy · 2/3" -->
 
-## Two Branching Strategies
+## 🌿 Two Branching Strategies
 
 | | Trunk-based | Feature branch ✅ |
 |---|---|---|
@@ -596,7 +626,7 @@ feature branch
 
 <!-- _footer: "Git Strategy · 3/3" -->
 
-## Rule of Thumb
+## 💡 Rule of Thumb
 
 > Trunk-based for solo projects where speed matters.
 > Feature branch when you have real users or a team.
@@ -607,13 +637,13 @@ Both are valid. Choose deliberately.
 
 <!-- _class: section-title -->
 
-# 8. Decision Framework
+# 8. 🤔 Decision Framework
 
 ---
 
 <!-- _footer: "Decision Framework · 1/2" -->
 
-## GitHub Pages vs Firebase Hosting
+## ⚖️ GitHub Pages vs Firebase Hosting
 
 | | GitHub Pages | Firebase Hosting |
 |---|---|---|
@@ -632,7 +662,7 @@ Pure static site, public repo → either works.
 
 <!-- _footer: "Decision Framework · 2/2" -->
 
-## 1 Environment vs 2 Environments
+## 🌍 1 Environment vs 2 Environments
 
 **Ask yourself:**
 
@@ -649,7 +679,7 @@ Pure static site, public repo → either works.
 
 <!-- _class: section-title -->
 
-# 9. Analytics
+# 9. 📊 Analytics
 
 **Action:** Enable Google Analytics in both Firebase projects
 **Result:** Page views and sessions tracking — check the console tomorrow
@@ -658,7 +688,7 @@ Pure static site, public repo → either works.
 
 <!-- _footer: "Analytics · 1/1" -->
 
-## Firebase Analytics
+## 📊 Firebase Analytics
 
 Enable in each Firebase project console:
 **Analytics → Enable Google Analytics**
@@ -680,13 +710,13 @@ logEvent(analytics, "link_clicked", { url: "https://..." });
 
 <!-- _class: section-title -->
 
-# 10. What's Next
+# 10. 🚀 What's Next
 
 ---
 
 <!-- _footer: "What's Next · 1/3" -->
 
-## What You Built Today
+## 🏆 What You Built Today
 
 - Link-in-Bio app deployed on Firebase Hosting
 - Firebase Auth + Firestore
@@ -698,7 +728,7 @@ logEvent(analytics, "link_clicked", { url: "https://..." });
 
 <!-- _footer: "What's Next · 2/3" -->
 
-## Take Home
+## 🎒 Take Home
 
 - [ ] Set up your own project
 - [ ] Enable Analytics and check it in 24h
@@ -708,7 +738,7 @@ logEvent(analytics, "link_clicked", { url: "https://..." });
 
 <!-- _footer: "What's Next · 3/3" -->
 
-## Resources
+## 📚 Resources
 
 - Firebase Docs: https://firebase.google.com/docs
 - Claude Code: https://claude.ai/code
@@ -716,13 +746,13 @@ logEvent(analytics, "link_clicked", { url: "https://..." });
 
 ---
 
-# Q&A
+# ❓ Q&A
 
 ### Ask anything.
 
 ---
 
-# Thank You
+# 🙏 Thank You
 
 **Workshop repo:** https://github.com/hspotlight/zero-to-saas-workshop
 **Solution branch:** `git checkout solution`
