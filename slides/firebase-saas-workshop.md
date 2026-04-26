@@ -230,19 +230,25 @@ Hosting feels meaningful · Auth makes sense · Firestore is simple · You can p
 <table style="width:100%;table-layout:fixed;border:none;border-collapse:separate;border-spacing:16px;">
   <tr>
     <td style="border:none;text-align:center;background:#FDF4E0;border-radius:12px;padding:16px;vertical-align:top;">
-      <img src="hspotlight-logo.jpg" style="width:100%;border-radius:8px;margin-bottom:10px;">
-      <strong style="color:#7C4A1E;">✅ Todo App</strong><br>
-      <small style="color:#5C3A10;">Task management with Auth + Firestore</small>
+      <a href="https://velocty-ab097.web.app/" target="_blank">
+        <img src="screenshot-velocty.png" style="width:100%;border-radius:8px;margin-bottom:10px;">
+      </a>
+      <strong style="color:#7C4A1E;">✅ <a href="https://velocty-ab097.web.app/" target="_blank" style="color:#7C4A1E;">Todo App</a></strong><br>
+      <small style="color:#5C3A10;">Task management <br>with Auth + Firestore</small>
     </td>
     <td style="border:none;text-align:center;background:#FDF4E0;border-radius:12px;padding:16px;vertical-align:top;">
-      <img src="hspotlight-logo.jpg" style="width:100%;border-radius:8px;margin-bottom:10px;">
-      <strong style="color:#7C4A1E;">🔳 QR Code Generator</strong><br>
-      <small style="color:#5C3A10;">Generate & save QR codes to Firestore</small>
+      <a href="https://cuteqr-prod.web.app/" target="_blank">
+        <img src="screenshot-cuteqr.png" style="width:100%;border-radius:8px;margin-bottom:10px;">
+      </a>
+      <strong style="color:#7C4A1E;">🔳 <a href="https://cuteqr-prod.web.app/" target="_blank" style="color:#7C4A1E;">QR Code Generator</a></strong><br>
+      <small style="color:#5C3A10;">Generate & save QR codes</small>
     </td>
     <td style="border:none;text-align:center;background:#FDF4E0;border-radius:12px;padding:16px;vertical-align:top;">
-      <img src="hspotlight-logo.jpg" style="width:100%;border-radius:8px;margin-bottom:10px;">
-      <strong style="color:#7C4A1E;">✍️ Personal Blog</strong><br>
-      <small style="color:#5C3A10;">Write & publish posts with Hosting + Firestore</small>
+      <a href="https://hspotlight.dev/" target="_blank">
+        <img src="screenshot-blog.png" style="width:100%;border-radius:8px;margin-bottom:10px;">
+      </a>
+      <strong style="color:#7C4A1E;">✍️ <a href="https://hspotlight.dev/" target="_blank" style="color:#7C4A1E;">Personal Blog</a></strong><br>
+      <small style="color:#5C3A10;">Write & publish posts<br> with Hosting + Firestore</small>
     </td>
   </tr>
 </table>
