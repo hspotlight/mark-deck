@@ -314,14 +314,26 @@ cd zero-to-saas-workshop
 **Repo structure:**
 ```
 zero-to-saas-workshop/
-├── index.html        # public profile page
-├── admin.html        # login + manage links
-├── app.js            # app logic (mostly empty)
-├── style.css         # basic styles
-├── firebase.js       # Firebase config placeholder
-├── .env.example      # env template
-└── __tests__/
-    └── links.test.js # pre-written Jest test
+├── __tests__/            # pre-written Jest tests
+├── .claude/              # Claude Code config
+├── .firebase/            # Firebase cache
+├── .github/              # GitHub Actions workflows
+├── docs/                 # documentation
+├── public/
+│   ├── analytics.js      # analytics helpers
+│   ├── app.js            # app logic (mostly empty)
+│   ├── firebase-config.js# Firebase init
+│   ├── index.html        # public profile page
+│   ├── login.html        # login page
+│   ├── login.js          # login logic
+│   ├── style.css         # styles
+│   └── utils.js          # shared utilities
+├── .claudeignore
+├── .env.test             # Firebase config for test env
+├── .env.prod             # Firebase config for prod env
+├── .firebaserc
+├── .gitignore
+└── CLAUDE.md
 ```
 
 > **Solution branch:** `git checkout solution` if you get stuck
@@ -836,5 +848,8 @@ logEvent(analytics, "link_clicked", { url: "https://..." });
 
 # 🙏 Thank You
 
+<img src="feedback-qr.png" width="220px">
+
+**Feedback form:** https://forms.gle/9iuJxtuxGJTRkk4D7
 **Workshop repo:** https://github.com/hspotlight/zero-to-saas-workshop
 **Solution branch:** `git checkout solution`
