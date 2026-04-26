@@ -11,7 +11,9 @@
     "test:emulator": "jest --testPathPattern=firestore.rules",
     "e2e": "FIREBASE_EMULATOR=true playwright test",
     "emulators": "firebase emulators:start",
-    "seed": "npx ts-node --project tsconfig.json firebase/seed.ts"
+    "seed": "npx ts-node --project tsconfig.json firebase/seed.ts",
+    "slides:dev": "marp --server slides/",
+    "slides:pdf": "marp slides/ --pdf --output slides/output/"
   },
   "dependencies": {
     "@codemirror/commands": "^6.10.3",
@@ -30,6 +32,7 @@
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "^5.0.0",
+    "@marp-team/marp-cli": "^4.3.1",
     "@playwright/test": "^1.59.1",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.9.1",
