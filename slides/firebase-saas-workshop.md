@@ -81,6 +81,17 @@ section::after {
   font-size: 0.7em;
 }
 
+/* Intro slide */
+section.intro {
+  justify-content: flex-start !important;
+  padding: 48px 64px 40px;
+}
+section.intro h1 {
+  border-bottom: 2px solid #F5C518;
+  margin-bottom: 28px;
+  font-size: 1.8em;
+}
+
 /* Section progress badge */
 footer {
   position: absolute;
@@ -107,6 +118,26 @@ footer {
 **Stack:** Vanilla HTML/CSS/JS · Firebase · GitHub · Claude Code
 
 **HSpotlight** · 30 April 2026
+
+---
+
+<!-- _class: intro -->
+
+# Nice to meet you 👋
+
+<div style="display:flex;align-items:center;margin-top:8px;">
+  <div style="flex-shrink:0;text-align:center;">
+    <img src="pakawat.jpg" width="220px" style="object-fit:cover;border-radius:50%;border:4px solid #F5C518;display:block;">
+    <div style="margin-top:14px;font-weight:700;font-size:0.85em;color:#2D1B00;">Pakawat Anekwiroj</div>
+  </div>
+  <ul style="list-style:none;padding:0;margin:0;font-size:1em;line-height:2;">
+    <li>💼 Software Engineer @ Agoda</li>
+    <li>🕐 ~8 years in software development</li>
+    <li>⚡ Self-development & Sustainable Software</li>
+  </ul>
+</div>
+
+<p style="position:absolute;bottom:40px;left:64px;font-style:italic;font-size:0.65em;color:#9B5E26;">"I believe in building software that lasts — and teams that grow."</p>
 
 ---
 
