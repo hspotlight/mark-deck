@@ -308,7 +308,7 @@ firebase login
 
 ---
 
-<!-- _footer: "Clone Starter Repo · 1/1" -->
+<!-- _footer: "Clone Starter Repo · 1/2" -->
 
 ## 📥 Get the Starter
 
@@ -344,6 +344,25 @@ zero-to-saas-workshop/
 ```
 
 > **Solution branch:** `git checkout solution` if you get stuck
+
+---
+
+<!-- _footer: "Clone Starter Repo · 2/2" -->
+
+## 💻 Run It Locally
+
+Before deploying, test everything on your machine:
+
+```bash
+# Option A: Simple static server (no emulated backend)
+npm serve public
+
+# Option B (not in workshop): Firebase Emulator Suite (Auth + Firestore in memory)
+firebase emulators:start
+```
+
+> **Emulator Suite** = local Firebase. Your data stays on your machine — nothing touches the real project.
+> Use it for local dev. Deploy only what you've verified works.
 
 ---
 
@@ -518,7 +537,7 @@ For each feature — end-to-end, one slice at a time:
 
 ---
 
-<!-- _footer: "Firebase Setup · 1/4" -->
+<!-- _footer: "Firebase Setup · 1/5" -->
 
 ## 🔥 Firebase: What We're Using
 
@@ -531,7 +550,25 @@ For each feature — end-to-end, one slice at a time:
 
 ---
 
-<!-- _footer: "Firebase Setup · 2/4" -->
+<!-- _footer: "Firebase Setup · 2/5" -->
+
+## 💰 Free Tier — Spark Plan
+
+You won't pay anything until you exceed:
+
+| Service | Free limit |
+|---|---|
+| Firestore reads | 50,000 / day |
+| Firestore writes | 20,000 / day |
+| Firestore storage | 1 GB |
+| Hosting bandwidth | 10 GB / month |
+| Authentication | Unlimited |
+
+> A workshop app and most early-stage SaaS won't come close. Upgrade only when you have real traffic.
+
+---
+
+<!-- _footer: "Firebase Setup · 3/5" -->
 
 ## 🧪 Create Two Firebase Projects
 
@@ -549,7 +586,7 @@ We need two projects: **test** and **prod**
 
 ---
 
-<!-- _footer: "Firebase Setup · 3/4" -->
+<!-- _footer: "Firebase Setup · 4/5" -->
 
 ## ⚙️ Configure Environment Variables
 
@@ -564,18 +601,16 @@ Fill in each file with the Firebase config from the console:
 ```javascript
 export const firebaseConfig = {
   apiKey: ...,
-  authDomain: ...,
   projectId: ...,
   appId: ...,
 };
-
 ```
 
-> **Never commit config files with real keys.** They are in `.gitignore` already.
+> **Firebase web config is not a secret** — `apiKey` is a public identifier visible to anyone who opens DevTools. Your protection is **Firestore Security Rules**, not hidden keys. We gitignore these files only to keep test and prod values separate.
 
 ---
 
-<!-- _footer: "Firebase Setup · 4/4" -->
+<!-- _footer: "Firebase Setup · 5/5" -->
 
 ## ✅ Enable Firebase Services
 
@@ -586,6 +621,8 @@ In each Firebase project console, enable:
 3. **Hosting** → Get started
 
 Do this for both `link-in-bio-test` and `link-in-bio-prod`.
+
+> ⚠️ **Test mode rules expire in 30 days.** After that, all reads and writes are denied. Before going live, replace them with proper security rules (see the Bonus section).
 
 ---
 
@@ -598,7 +635,7 @@ Do this for both `link-in-bio-test` and `link-in-bio-prod`.
 
 ---
 
-<!-- _footer: "CI/CD · 1/4" -->
+<!-- _footer: "CI/CD · 1/6" -->
 
 ## ⚙️ Set Up GitHub Actions
 
@@ -617,7 +654,25 @@ Your Firebase config stays in `config/firebase-test.js` and `config/firebase-pro
 
 ---
 
-<!-- _footer: "CI/CD · 2/4" -->
+<!-- _footer: "CI/CD · 2/6" -->
+
+## 🗂️ How Two Projects Stay Separate
+
+`.firebaserc` maps aliases to Firebase project IDs:
+
+```json
+{
+  "projects": {
+    "test": "link-in-bio-test",
+    "prod": "link-in-bio-prod"
+  }
+}
+```
+> You never touch this manually — `firebase init hosting:github` sets it up.
+
+---
+
+<!-- _footer: "CI/CD · 3/6" -->
 
 ## 📋 Generated Workflow
 
@@ -637,7 +692,7 @@ Two workflows. Two projects. Automatic.
 
 ---
 
-<!-- _footer: "CI/CD · 3/4" -->
+<!-- _footer: "CI/CD · 4/6" -->
 
 ## 🧪 Add a Test Step
 
@@ -655,7 +710,7 @@ Now tests must pass before any deployment happens.
 
 ---
 
-<!-- _footer: "CI/CD · 4/4" -->
+<!-- _footer: "CI/CD · 5/6" -->
 
 ## 🔀 Open Your First PR
 
@@ -671,6 +726,25 @@ Watch GitHub Actions:
 - Tests run
 - App deploys to test Firebase project
 - Check the preview URL in the PR comment
+
+---
+
+<!-- _footer: "CI/CD · 6/6" -->
+
+## 🔴 When CI/CD Fails
+
+**Tests failed:**
+- Click the failing check → "Details" → read the error
+- Fix locally, push again — the workflow re-runs automatically
+
+**Deploy failed:**
+- Check for a missing Firebase service account secret in repo settings
+- Run `firebase deploy --only hosting --project test` locally to reproduce
+
+**Preview URL missing from PR:**
+- The GitHub App needs repo access — re-run `firebase init hosting:github`
+
+> Most failures have a direct error message. Read it before guessing.
 
 ---
 
@@ -884,7 +958,7 @@ logEvent(analytics, "link_clicked", { url: "https://..." });
 
 ---
 
-<!-- _footer: "Firebase Auth · 1/9" -->
+<!-- _footer: "Firebase Auth · 1/10" -->
 
 ## 🔐 What is Firebase Auth?
 
@@ -898,7 +972,7 @@ Firebase Auth handles **identity** — who is this user?
 
 ---
 
-<!-- _footer: "Firebase Auth · 2/9" -->
+<!-- _footer: "Firebase Auth · 2/10" -->
 
 ## 🔄 Auth Flow
 
@@ -922,7 +996,7 @@ Firebase Auth SDK ──► Firebase Auth service
 
 ---
 
-<!-- _footer: "Firebase Auth · 3/9" -->
+<!-- _footer: "Firebase Auth · 3/10" -->
 
 ## 🔗 Website ↔ Firebase — Sequence Diagram
 
@@ -932,7 +1006,7 @@ Firebase Auth SDK ──► Firebase Auth service
 
 ---
 
-<!-- _footer: "Firebase Auth · 4/9" -->
+<!-- _footer: "Firebase Auth · 4/10" -->
 
 ## 💻 Email/Password Sign-In
 
@@ -954,7 +1028,27 @@ console.log(user.email); // email
 
 ---
 
-<!-- _footer: "Firebase Auth · 5/9" -->
+<!-- _footer: "Firebase Auth · 5/10" -->
+
+## 🔑 Password Reset
+
+```javascript
+import { sendPasswordResetEmail } from "firebase/auth";
+
+await sendPasswordResetEmail(auth, "user@email.com");
+// Firebase sends a reset email automatically — no backend needed
+```
+
+**What happens:**
+1. Firebase sends a branded reset email
+2. User clicks the link → redirected to a Firebase-hosted reset page
+3. After reset, they sign in with their new password
+
+> Customize the email template in: **Firebase Console → Authentication → Templates**
+
+---
+
+<!-- _footer: "Firebase Auth · 6/10" -->
 
 ## 🔵 Google Sign-In
 
@@ -972,7 +1066,7 @@ Same `user.uid` whether they sign in with email or Google.
 
 ---
 
-<!-- _footer: "Firebase Auth · 6/9" -->
+<!-- _footer: "Firebase Auth · 7/10" -->
 
 ## 👁️ Watching Auth State
 
@@ -996,7 +1090,7 @@ onAuthStateChanged(auth, (user) => {
 
 ---
 
-<!-- _footer: "Firebase Auth · 7/9" -->
+<!-- _footer: "Firebase Auth · 8/10" -->
 
 ## 🏷️ Custom Claims — What & How
 
@@ -1021,7 +1115,7 @@ match /admin/{doc} {
 
 ---
 
-<!-- _footer: "Firebase Auth · 8/9" -->
+<!-- _footer: "Firebase Auth · 9/10" -->
 
 ## ⚖️ Claims vs Firestore — A Trade-Off
 
@@ -1041,7 +1135,7 @@ If your UI just displays it → put it in Firestore.
 
 ---
 
-<!-- _footer: "Firebase Auth · 9/9" -->
+<!-- _footer: "Firebase Auth · 10/10" -->
 
 ## 🚪 Sign Out
 
@@ -1069,7 +1163,7 @@ await signOut(auth);
 
 ---
 
-<!-- _footer: "Firestore · 1/6" -->
+<!-- _footer: "Firestore · 1/9" -->
 
 ## 🗄️ SQL vs NoSQL — The Core Difference
 
@@ -1086,7 +1180,7 @@ No server to manage · Real-time sync built-in · Scales from 1 to 1M users auto
 
 ---
 
-<!-- _footer: "Firestore · 2/6" -->
+<!-- _footer: "Firestore · 2/9" -->
 
 ## 📂 Collections and Documents
 
@@ -1111,7 +1205,7 @@ Firestore
 
 ---
 
-<!-- _footer: "Firestore · 3/6" -->
+<!-- _footer: "Firestore · 3/9" -->
 
 ## 🗺️ Data Model — ERD Style
 
@@ -1143,7 +1237,7 @@ Firestore
 
 ---
 
-<!-- _footer: "Firestore · 4/6" -->
+<!-- _footer: "Firestore · 4/9" -->
 
 ## ✍️ Write & Read a Document
 
@@ -1167,7 +1261,7 @@ if (snap.exists()) {
 
 ---
 
-<!-- _footer: "Firestore · 4/6" -->
+<!-- _footer: "Firestore · 5/9" -->
 
 ## 📋 Working with a Collection
 
@@ -1191,7 +1285,7 @@ await deleteDoc(doc(db, "users", user.uid, "links", linkId));
 
 ---
 
-<!-- _footer: "Firestore · 5/6" -->
+<!-- _footer: "Firestore · 6/9" -->
 
 ## 🧩 Schema Flexibility — No Migration Needed
 
@@ -1218,7 +1312,7 @@ const theme = data.theme ?? "light"; // default gracefully
 
 ---
 
-<!-- _footer: "Firestore · 6/6" -->
+<!-- _footer: "Firestore · 7/9" -->
 
 ## ⚡ Real-Time Listener
 
@@ -1242,7 +1336,7 @@ unsubscribe();
 
 ---
 
-<!-- _footer: "Firestore · 6/6" -->
+<!-- _footer: "Firestore · 8/9" -->
 
 ## 🔒 Security Rules
 
@@ -1263,6 +1357,31 @@ service cloud.firestore {
 ```
 
 > Without rules, anyone can read/write everything. **Always set rules before going live.**
+
+---
+
+<!-- _footer: "Firestore · 9/9" -->
+
+## 📇 Composite Index Errors
+
+When you query with multiple `where` clauses, Firestore requires an index:
+
+```javascript
+// This will throw without a composite index
+const q = query(linksRef,
+  where("enabled", "==", true),
+  orderBy("order")
+);
+```
+
+**The error message contains the fix:**
+```
+FAILED_PRECONDITION: The query requires an index.
+You can create it here: https://console.firebase.google.com/...
+```
+
+> Click the link — Firebase creates the index for you in one click.
+> Indexes take 1–2 minutes to build.
 
 ---
 
