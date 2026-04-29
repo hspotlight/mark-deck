@@ -867,3 +867,547 @@ logEvent(analytics, "link_clicked", { url: "https://..." });
 **Feedback form:** https://forms.gle/9iuJxtuxGJTRkk4D7
 **Workshop repo:** https://github.com/hspotlight/zero-to-saas-workshop
 **Solution branch:** `git checkout solution`
+
+---
+
+<!-- _class: section-title -->
+
+# 🎁 Bonus: Deep Dive
+
+### Firebase Auth · Firestore · Analytics
+
+---
+
+<!-- _class: section-title -->
+
+# 🔐 Firebase Auth
+
+---
+
+<!-- _footer: "Firebase Auth · 1/9" -->
+
+## 🔐 What is Firebase Auth?
+
+Firebase Auth handles **identity** — who is this user?
+
+- Verifies credentials (email/password, Google, etc.)
+- Issues a signed **JWT token** your app can trust
+- Manages session automatically (persists across page refresh)
+
+**You don't store passwords.** Firebase does — securely.
+
+---
+
+<!-- _footer: "Firebase Auth · 2/9" -->
+
+## 🔄 Auth Flow
+
+```
+User enters email + password
+        │
+        ▼
+Firebase Auth SDK ──► Firebase Auth service
+                              │
+                    verify credentials
+                              │
+                        ┌─────▼──────┐
+                        │  JWT Token │  (expires in 1h, auto-refreshed)
+                        └─────┬──────┘
+                              │
+                    stored in browser
+                              │
+                        ▼
+              Your app reads: auth.currentUser
+```
+
+---
+
+<!-- _footer: "Firebase Auth · 3/9" -->
+
+## 🔗 Website ↔ Firebase — Sequence Diagram
+
+```
+Browser (your JS)          Firebase Auth       Firestore         Analytics
+       │                        │                  │                 │
+       │── signIn(email,pw) ───►│                  │                 │
+       │                   verify pw               │                 │
+       │◄── JWT token ──────────│                  │                 │
+       │                        │                  │                 │
+       │── setDoc(uid, data) ───────────────────►  │                 │
+       │   [JWT auto-attached]              check rules              │
+       │◄── ok / error ────────────────────────────│                 │
+       │                        │                  │                 │
+       │── onSnapshot(ref) ─────────────────────►  │                 │
+       │◄── live updates ──────────────────────────│                 │
+       │                        │                  │                 │
+       │── logEvent("click") ──────────────────────────────────────► │
+```
+
+> The JWT travels automatically on every Firestore call — you never attach it manually.
+
+---
+
+<!-- _footer: "Firebase Auth · 4/9" -->
+
+## 💻 Email/Password Sign-In
+
+```javascript
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
+const auth = getAuth();
+
+// Sign in
+const userCredential = await signInWithEmailAndPassword(
+  auth, "user@email.com", "password123"
+);
+const user = userCredential.user;
+console.log(user.uid);   // unique ID
+console.log(user.email); // email
+```
+
+> `user.uid` is your key — use it everywhere in Firestore.
+
+---
+
+<!-- _footer: "Firebase Auth · 5/9" -->
+
+## 🔵 Google Sign-In
+
+```javascript
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+
+const provider = new GoogleAuthProvider();
+
+const result = await signInWithPopup(auth, provider);
+const user = result.user;
+// Same user.uid — consistent across providers
+```
+
+Same `user.uid` whether they sign in with email or Google.
+
+---
+
+<!-- _footer: "Firebase Auth · 6/9" -->
+
+## 👁️ Watching Auth State
+
+```javascript
+import { onAuthStateChanged } from "firebase/auth";
+
+// Runs every time auth state changes
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in
+    console.log("Logged in:", user.uid);
+    showDashboard();
+  } else {
+    // User is signed out
+    showLoginPage();
+  }
+});
+```
+
+> Call this once on page load. It replaces manual session checks.
+
+---
+
+<!-- _footer: "Firebase Auth · 7/9" -->
+
+## 🏷️ Custom Claims — What & How
+
+Claims are extra fields baked **inside the JWT token** itself. Set server-side only.
+
+```javascript
+// Server-side (Firebase Admin SDK / Cloud Function)
+await admin.auth().setCustomUserClaims(uid, { role: "admin" });
+
+// Client-side — read after token refresh
+const token = await user.getIdTokenResult();
+console.log(token.claims.role); // "admin"
+
+// Enforce in Firestore Security Rules — zero extra read
+match /admin/{doc} {
+  allow write: if request.auth.token.role == "admin";
+}
+```
+
+> Claims update only after the next token refresh (~1h).
+> Force it immediately: `await user.getIdToken(true)`
+
+---
+
+<!-- _footer: "Firebase Auth · 8/9" -->
+
+## ⚖️ Claims vs Firestore — A Trade-Off
+
+> "Everything in software architecture is a trade-off."
+
+| | Claims (in JWT) | Role field in Firestore |
+|---|---|---|
+| Where stored | Inside the token | In a document |
+| Extra DB read? | ❌ No | ✅ Yes, every request |
+| Usable in Security Rules? | ✅ Directly | ❌ Not without a function |
+| Update speed | ~1h (token refresh) | Instant |
+| Best for | Stable roles (admin, pro) | Frequently changing data |
+
+**Rule of thumb:**
+If your Security Rules need it → put it in claims.
+If your UI just displays it → put it in Firestore.
+
+---
+
+<!-- _footer: "Firebase Auth · 9/9" -->
+
+## 🚪 Sign Out
+
+```javascript
+import { signOut } from "firebase/auth";
+
+await signOut(auth);
+// onAuthStateChanged fires → user is null → show login
+```
+
+**What's in `user`?**
+
+| Field | Value |
+|---|---|
+| `user.uid` | Unique ID (never changes) |
+| `user.email` | Email address |
+| `user.displayName` | Name (from Google etc.) |
+| `user.photoURL` | Profile photo URL |
+
+---
+
+<!-- _class: section-title -->
+
+# 🗄️ Firestore
+
+---
+
+<!-- _footer: "Firestore · 1/6" -->
+
+## 🗄️ SQL vs NoSQL — The Core Difference
+
+| | SQL (e.g. MySQL) | NoSQL (Firestore) |
+|---|---|---|
+| Structure | Tables + rows | Collections + documents |
+| Schema | Fixed columns | Flexible, per-document |
+| Relations | JOINs | Nested or referenced |
+| Scale | Vertical | Horizontal |
+| Query | Any column | Indexed fields only |
+
+**Why Firestore for SaaS?**
+No server to manage · Real-time sync built-in · Scales from 1 to 1M users automatically
+
+---
+
+<!-- _footer: "Firestore · 2/6" -->
+
+## 📂 Collections and Documents
+
+```
+Firestore
+└── users/                          ← Collection
+    ├── uid_abc123/                 ← Document (ID = user.uid)
+    │   ├── name: "Pakawat"
+    │   ├── bio: "Software Engineer"
+    │   └── links/                  ← Sub-collection
+    │       ├── link_001/
+    │       │   ├── label: "GitHub"
+    │       │   └── url: "https://..."
+    │       └── link_002/
+    │           ├── label: "LinkedIn"
+    │           └── url: "https://..."
+    └── uid_xyz789/
+        └── ...
+```
+
+> **Collection** = folder. **Document** = JSON object with an ID.
+
+---
+
+<!-- _footer: "Firestore · 3/6" -->
+
+## 🗺️ Data Model — ERD Style
+
+```
+┌─────────────────────────────┐
+│  users  (collection)        │
+│─────────────────────────────│
+│  uid  (document ID = PK)    │
+│  name: string               │
+│  bio: string                │
+│  createdAt: timestamp       │
+└──────────────┬──────────────┘
+               │ 1
+               │ has many
+               │ ∞
+┌──────────────▼──────────────┐
+│  links  (sub-collection)    │
+│─────────────────────────────│
+│  linkId  (auto-generated)   │
+│  label: string              │
+│  url: string                │
+│  order: number              │
+│  enabled: boolean           │
+└─────────────────────────────┘
+```
+
+> No foreign keys. The **path itself** encodes the relationship:
+> `users/{uid}/links/{linkId}`
+
+---
+
+<!-- _footer: "Firestore · 4/6" -->
+
+## ✍️ Write & Read a Document
+
+```javascript
+import { doc, setDoc, getDoc } from "firebase/firestore";
+
+const db = getFirestore();
+
+// Write
+await setDoc(doc(db, "users", user.uid), {
+  name: "Pakawat",
+  bio: "Software Engineer"
+});
+
+// Read
+const snap = await getDoc(doc(db, "users", user.uid));
+if (snap.exists()) {
+  console.log(snap.data()); // { name: "Pakawat", bio: "..." }
+}
+```
+
+---
+
+<!-- _footer: "Firestore · 4/6" -->
+
+## 📋 Working with a Collection
+
+```javascript
+import { collection, addDoc, getDocs, deleteDoc } from "firebase/firestore";
+
+const linksRef = collection(db, "users", user.uid, "links");
+
+// Add a link
+await addDoc(linksRef, { label: "GitHub", url: "https://github.com/..." });
+
+// Get all links
+const snapshot = await getDocs(linksRef);
+snapshot.forEach(doc => {
+  console.log(doc.id, doc.data());
+});
+
+// Delete a link
+await deleteDoc(doc(db, "users", user.uid, "links", linkId));
+```
+
+---
+
+<!-- _footer: "Firestore · 5/6" -->
+
+## 🧩 Schema Flexibility — No Migration Needed
+
+**SQL:** adding a column requires `ALTER TABLE` on every row.
+
+**Firestore:** just write the new field. Old documents are untouched.
+
+```javascript
+// v1 — original document
+{ name: "Pakawat", bio: "Engineer" }
+
+// v2 — add a theme field (only new/updated docs get it)
+await updateDoc(doc(db, "users", uid), {
+  theme: "dark",
+  avatarUrl: "https://..."
+});
+
+// Old docs still valid — theme is just missing (not null, not error)
+const data = snap.data();
+const theme = data.theme ?? "light"; // default gracefully
+```
+
+**Trade-off:** you own the schema contract. No DB enforces it — your code must handle missing fields.
+
+---
+
+<!-- _footer: "Firestore · 6/6" -->
+
+## ⚡ Real-Time Listener
+
+```javascript
+import { onSnapshot } from "firebase/firestore";
+
+// Subscribe — fires immediately + on every change
+const unsubscribe = onSnapshot(linksRef, (snapshot) => {
+  const links = snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+  renderLinks(links); // update UI automatically
+});
+
+// Stop listening when done (e.g. user logs out)
+unsubscribe();
+```
+
+> No polling. No refresh. UI updates the moment data changes — anywhere.
+
+---
+
+<!-- _footer: "Firestore · 6/6" -->
+
+## 🔒 Security Rules
+
+Firestore rules decide who can read/write what:
+
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Only the owner can write their own data
+    match /users/{userId}/{document=**} {
+      allow read: if true;           // public profile
+      allow write: if request.auth.uid == userId; // owner only
+    }
+  }
+}
+```
+
+> Without rules, anyone can read/write everything. **Always set rules before going live.**
+
+---
+
+<!-- _class: section-title -->
+
+# 📊 Firebase Analytics
+
+---
+
+<!-- _footer: "Analytics · 1/6" -->
+
+## 📊 Automatic vs Manual Tracking
+
+| Automatic (zero code) | Manual (you call `logEvent`) |
+|---|---|
+| `page_view` | Link clicked |
+| `session_start` | Button clicked |
+| `first_visit` | Sign-up completed |
+| `user_engagement` | Profile viewed |
+| Device & OS | Error occurred |
+
+> **~24h delay** — events are batched on the device and uploaded periodically, then Google's pipeline aggregates and processes them. Not a bug — a deliberate trade-off for battery and bandwidth efficiency.
+> Use **DebugView** during development for real-time events.
+
+---
+
+<!-- _footer: "Analytics · 2/6" -->
+
+## 🚀 Setup
+
+```javascript
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app); // that's it
+```
+
+Automatic events start firing immediately.
+
+> Analytics only works on **deployed** sites — not `localhost`.
+
+---
+
+<!-- _footer: "Analytics · 3/6" -->
+
+## 🎯 Standard Events — Use These First
+
+Firebase has pre-defined event names. Use them so your data aligns with Google's reporting.
+
+| Event name | When to use |
+|---|---|
+| `login` | User signs in |
+| `sign_up` | New account created |
+| `page_view` | User navigates to a page |
+| `select_content` | User clicks a link or item |
+| `share` | User shares something |
+| `search` | User searches |
+| `exception` | An error occurred |
+| custom name | When none of the above fit |
+
+> Prefer standard names — they unlock built-in reports automatically.
+
+---
+
+<!-- _footer: "Analytics · 4/6" -->
+
+## 🎯 Custom Events — Code
+
+```javascript
+import { logEvent } from "firebase/analytics";
+
+// Standard event — unlocks built-in login report
+logEvent(analytics, "login", { method: "Google" });
+
+// Standard event — click on a link card
+logEvent(analytics, "select_content", {
+  content_type: "link",
+  item_id: "github"
+});
+
+// Custom event — nothing standard fits
+logEvent(analytics, "profile_viewed", {
+  profile_uid: "uid_abc123"
+});
+```
+
+> Event name + optional params. Keep names `snake_case`. Max 40 chars.
+
+---
+
+<!-- _footer: "Analytics · 5/6" -->
+
+## 👤 User Properties
+
+Tag users for segmentation:
+
+```javascript
+import { setUserProperties, setUserId } from "firebase/analytics";
+
+// Set after login
+setUserId(analytics, user.uid);
+
+setUserProperties(analytics, {
+  plan: "free",          // free / pro
+  links_count: "5"       // must be string
+});
+```
+
+Then in the console: filter events by `plan = "pro"` to see how paying users behave differently.
+
+---
+
+<!-- _footer: "Analytics · 6/6" -->
+
+## 🐛 DebugView — Real-Time Events
+
+Enable debug mode in the browser:
+
+```javascript
+// Add to URL while testing:
+// ?debug_mode=true
+
+// Or in JS (dev only):
+import { getAnalytics, setAnalyticsDebugMode } from "firebase/analytics";
+// Note: use browser extension or URL param in practice
+```
+
+Then go to: **Firebase Console → Analytics → DebugView**
+
+Events appear within seconds — no 24h wait.
+
+> Use this during development. Disable before going live.
