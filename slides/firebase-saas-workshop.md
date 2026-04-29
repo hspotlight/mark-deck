@@ -926,22 +926,7 @@ Firebase Auth SDK ──► Firebase Auth service
 
 ## 🔗 Website ↔ Firebase — Sequence Diagram
 
-```
-Browser (your JS)          Firebase Auth       Firestore         Analytics
-       │                        │                  │                 │
-       │── signIn(email,pw) ───►│                  │                 │
-       │                   verify pw               │                 │
-       │◄── JWT token ──────────│                  │                 │
-       │                        │                  │                 │
-       │── setDoc(uid, data) ───────────────────►  │                 │
-       │   [JWT auto-attached]              check rules              │
-       │◄── ok / error ────────────────────────────│                 │
-       │                        │                  │                 │
-       │── onSnapshot(ref) ─────────────────────►  │                 │
-       │◄── live updates ──────────────────────────│                 │
-       │                        │                  │                 │
-       │── logEvent("click") ──────────────────────────────────────► │
-```
+<img src="diagrams/firebase-sequence.svg" width="600">
 
 > The JWT travels automatically on every Firestore call — you never attach it manually.
 

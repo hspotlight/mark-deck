@@ -1,0 +1,14 @@
+sequenceDiagram
+    participant B as Browser (your JS)
+    participant A as Firebase Auth
+    participant F as Firestore
+    participant An as Analytics
+    B->>A: signIn(email, pw)
+    Note over A: verify pw
+    A-->>B: JWT token
+    B->>F: setDoc(uid, data) [JWT auto-attached]
+    Note over F: check rules
+    F-->>B: ok / error
+    B->>F: onSnapshot(ref)
+    F-->>B: live updates
+    B->>An: logEvent("click")
