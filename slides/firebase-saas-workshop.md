@@ -335,8 +335,9 @@ zero-to-saas-workshop/
 │   ├── style.css         # styles
 │   └── utils.js          # shared utilities
 ├── .claudeignore
-├── .env.test             # Firebase config for test env
-├── .env.prod             # Firebase config for prod env
+├── public/config/
+│   ├── firebase-test.js  # Firebase config for test env
+│   └── firebase-prod.js  # Firebase config for prod env
 ├── .firebaserc
 ├── .gitignore
 └── CLAUDE.md
@@ -365,7 +366,8 @@ zero-to-saas-workshop/
 3. CLAUDE.md                        → set rules and guardrails
 4. Agents                           → ask Claude to create project agents
 5. /firebase-webapp-scaffold prd.md → build from PRD
-6. Dev loop                         → TDD + vertical slicing per feature
+6. /tdd                             → red-green-refactor per feature
+7. /qa                              → review before opening PR
 ```
 
 ---
@@ -388,13 +390,16 @@ It can:
 
 ## ⚡ Skills: Pre-built Workflows
 
-The starter repo already includes three skills:
+The starter repo includes six skills:
 
 | Skill | What it does |
 |---|---|
 | `/grill-me` | Interviews you to define the project |
 | `/to-prd` | Converts the plan into a PRD document |
 | `/firebase-webapp-scaffold` | Scaffolds the app from the PRD |
+| `/tdd` | Red-green-refactor loop — test first, then implement |
+| `/qa` | Reviews your code and catches issues before PR |
+| `/frontend-design` | Generates production-grade UI from your description |
 
 Skills live in the repo — no extra install needed.
 
@@ -423,7 +428,7 @@ Claude interviews you — one question at a time — until it has a complete pic
 Once the plan is agreed, run:
 
 ```
-/to-prd
+/to-prd write a file
 ```
 
 Claude converts the conversation into a structured Product Requirements Document and saves it to the repo.
@@ -493,9 +498,9 @@ For each feature — end-to-end, one slice at a time:
 
 ```
 1. Pick a feature slice from the PRD
-2. Write the test first (Jest)
-3. Claude implements until the test passes
-4. Verify in the browser
+2. /tdd          → write test first, implement until green
+3. /frontend-design → polish the UI if needed
+4. /qa           → review before opening PR
 5. /commit → push → open PR
 6. Repeat
 ```
@@ -509,7 +514,7 @@ For each feature — end-to-end, one slice at a time:
 # 5. 🔥 Firebase Project Setup
 
 **Action:** Create two Firebase projects (test + prod), configure env files, enable services
-**Result:** Two live Firebase projects wired to your local `.env.test` and `.env.prod`
+**Result:** Two live Firebase projects wired to `config/firebase-test.js` and `config/firebase-prod.js`
 
 ---
 
@@ -550,20 +555,23 @@ We need two projects: **test** and **prod**
 
 Copy the template:
 ```bash
-cp .env.example .env.test
-cp .env.example .env.prod
+cp public/config/firebase-example.js public/config/firebase-test.js
+cp public/config/firebase-example.js public/config/firebase-prod.js
 ```
 
 Fill in each file with the Firebase config from the console:
 
-```env
-FIREBASE_API_KEY=...
-FIREBASE_AUTH_DOMAIN=...
-FIREBASE_PROJECT_ID=...
-FIREBASE_APP_ID=...
+```javascript
+export const firebaseConfig = {
+  apiKey: ...,
+  authDomain: ...,
+  projectId: ...,
+  appId: ...,
+};
+
 ```
 
-> **Never commit `.env` files.** They are in `.gitignore` already.
+> **Never commit config files with real keys.** They are in `.gitignore` already.
 
 ---
 
@@ -605,7 +613,7 @@ It will:
 2. Create a service account automatically
 3. Generate `.github/workflows/firebase-hosting-*.yml`
 
-Your env vars stay in `.env.test` and `.env.prod` — never in GitHub secrets.
+Your Firebase config stays in `config/firebase-test.js` and `config/firebase-prod.js` — never in GitHub secrets.
 
 ---
 
