@@ -162,7 +162,7 @@ footer {
 | # | Section | Time |
 |---|---|---|
 | 6 | CI/CD with Firebase CLI | 20 min |
-| 7 | Git + env strategy | 15 min |
+| 7 | Git + env strategy | 10 min |
 | 8 | Decision framework | 10 min |
 | 9 | Analytics | 5 min |
 | 10 | Q&A + What's next | 15 min |
